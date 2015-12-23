@@ -1,22 +1,22 @@
-OBJS=lm.o
-TESTOBJS=tests.o
+OBJS=src/lm.o
+TESTOBJS=tests/tests.o
 
 
-all: lm.a tests liblm.so
+all: lm.a tests.exe liblm.so
 
 clean:
-	rm -f $(OBJS) $(TESTOBJS) lm.a liblm.so tests
+	rm -f $(OBJS) $(TESTOBJS) lm.a liblm.so tests.exe
 
 COPTS=-O0 -g -fPIC
 #-fprofile-arcs -ftest-coverage
 #COPTS=-O3 -Wall
-CPPOPTS=-O0 -g -Wall -ggdb3 -fPIC
+CPPOPTS=-O0 -g -Wall -ggdb3 -fPIC -I./src
 #-fprofile-arcs -ftest-coverage
 
 
 
 
-.PHONY: calibrate/calibrate.a
+.PHONY: 
 
 %.o: %.c
 	gcc -c $^ -o $@ -I. -Iapi $(COPTS)
@@ -24,8 +24,8 @@ CPPOPTS=-O0 -g -Wall -ggdb3 -fPIC
 %.o: %.cc
 	g++ -c $^ -o $@ $(CPPOPTS)
 
-tests: $(TESTOBJS) lm.a
-	g++ $^ -lrt -ldl -pthread -o $@ $(CPPOPTS) lm.a
+tests.exe: $(TESTOBJS) lm.a
+	g++ $^ -lrt -ldl -pthread -o $@ $(CPPOPTS) -I./src lm.a
 
 liblm.so: $(OBJS)
 	g++ -shared $(OBJS) -o liblm.so
