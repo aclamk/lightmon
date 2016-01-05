@@ -283,6 +283,16 @@ result_e Manager::DirList_dirlist(CTX* ctx, std::vector<dir_item_d>& files)
    {
       dir_item_d di;
       di.name=it->first;
+      unsigned int f;
+      if(it->second->type==Entry::Dir)
+	f=F_DIR;
+      else
+	{
+	  CTX* x=&it->second->as_node()->base_ctx;
+	  if(x->read) f=F_RD;
+	  if(x->write) f|=F_WR;
+	}
+      di.flags=f;
       files.push_back(di);
    }
    return Success;
